@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+	<title>Sexy-dice</title>
+	<link href="https://fonts.googleapis.com/css?family=Allerta&display=swap" rel="stylesheet">
+	<style>
+		*{
+			margin: 0;padding:0;box-sizing: border-box;
+		}
+		body{
+			background-color: #383B39;
+			font-size:24px;
+			font-family: 'Allerta', sans-serif;
+		}
+		.wrapper{
+			background-color: #383B39;
+			overflow: hidden;
+			min-height: 100vh;
+			overflow: hidden;
+			max-width: 500px;
+			margin: auto;
+			box-shadow: 0px 0px 15px rgba(0,0,0,0.3);
+
+		}
+		main{
+			position: relative;
+			height: inherit;
+			padding-top:70px;
+		}
+		header{
+			position: absolute;
+			left:0px;
+			top:0px;
+			width: 100%;
+			padding:35px;
+			color:#F7B760;
+			display: flex;
+			justify-content: space-between;
+		}
+		.dices{
+			display: flex;
+			padding:calc(35px / 2);
+			flex-wrap: wrap-reverse;
+			flex-direction: row-reverse;
+			justify-content: center;
+			
+		}
+		.result{
+			display: flex;
+			flex-direction: column;
+			color:#F7B760;
+			align-items: center;
+			position: relative;
+			margin:70px 0;
+		}
+		.result::after{
+		content: "";
+		display:block;
+		width: calc(50% - 10vh);
+		height:2px;
+		background-image: linear-gradient(90deg,rgba(247, 183, 96, 1) 0%, rgba(247, 183, 96, 0) 100%);
+		position: absolute;
+		left:0;
+		top:calc(50% - 15px);
+		}
+		.result::before{
+		content: "";
+		display:block;
+		width: calc(50% - 10vh);
+		height:2px;
+		background-image: linear-gradient(-90deg,rgba(247, 183, 96, 1) 0%, rgba(247, 183, 96, 0) 100%);
+		position: absolute;
+		right:0;
+		top:calc(50% - 15px);
+		}
+		.number{
+			font-size: 62px;
+		}
+		.phrase{
+			font-size: 18px;
+			margin-top:15px;
+		}
+		.dice{
+			background-color: #F7B760;
+			height:75px;
+			border-radius: 5px;
+			margin:calc(35px / 2);
+			flex-grow: 1;
+			text-align: center;
+			cursor:pointer;
+			display:flex;justify-content: center;
+			align-items: center;
+		}
+
+		.d20{
+			min-width:300px;
+		}
+		.d12,.d10{
+			width:30%;
+		}
+		.d6,.d8,.d4{
+			width:20%;
+		}
+		.history{
+			background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAALASURBVHgB3VVLaBNhEJ7ZJk18lDY5KEiLohVBiyjqxZNQUS8mqfjAR3JQUXwcPKS+LuamttSDSEWhl6YefFB2FUWQ4s2LDzxYL6WgKIoKblpB89xxZjcbtkk2ieLFDvz8/87///PN459vAf53wVqbdGdXc8rn24aIe4hgDas6eCgE8FEBfAVoqK3pjIq772bdbCj2QtdiCefGlBrdmvLNecM+aGx8H6tW8mjhMY+9WkFAe4nwdsrnf6ursZ66AOzvBRtEZgPhMeuW8+c4jziRsdrwGq0ZP8w3UOnivVNAwA7AMkAa/a5FL1MioYBbinQtSsXlMx4beWTZwNm2bPoqp6AA1VPYpPt8xxBwgD+b2UBfMJw8Uw9AJM8piATDIw+dh+0zgXByRu1SD/Z3k6E8EhCOpicQGlGrpGiGeBCUDdCgtG2/NQaIcSss7KcbR7z1AMBZk4ZA0r8GwapX59TCdLjkqb0oD/tPReqkq9EhTvoVQoqw6p7oFfiHQh54Ys4A623dXwH8GI0uqKYvFLzvZeZULKoA4BcyLa/km3awxdWy9e4hr8CYG0i5OCP4bCoo0+F22GNAtwmC0FUNpKkpt9jyAz5VACDCC1OhKFvcAFp2JL86QXIe3OncxwKadxHoeQUA42rWBIelQ+uBcCMeD4aGB0u3zTt0yAQgRStFbS+EFZm4Jnm5Stqf52u1QHi67tQx654EkxBxovWLX6uIwKRcwl4rRByQ9ocGJaXGNvOtfjDTb8Tx6M1cyW75YWFFVp4GITtuf+lQV7J7usmTmm4/UTTu5TpeagslzznPVAAI5eprJy8WQUTG2a8haaL8z/Q7UXjm+pdYBTVzLv8J4n9DX+D10vOYSBg1AWzR7x+ICHHxshNqCk6wld5AaFirulvrqrCiEJdwCx9cxwluNy8hfGCXX8prkYI6cz775DdyeBaWig6+IwAAAABJRU5ErkJggg==");
+			background-position: center center;
+			background-repeat: no-repeat;
+			width:24px;
+			height:24px;
+			z-index: 2;
+		}
+		.modal{
+			z-index: 3;
+			position: fixed;
+			top:0;
+			left:0;
+			width: 100%;
+			height: 100%;
+			display: none;
+			flex-direction: column-reverse;
+			justify-content: center;
+			align-items: center;
+			background-color: rgba(30,30,30,0.9);
+			color:#F7B760;
+			font-size:30px;
+		}
+		.historyDice{
+			display: flex;
+		}
+		.historyDice > div{
+			
+			margin:10px;
+		}
+		.hisL{
+			text-align: left;
+			width:50px;
+		}
+		.hisC{
+			text-align: center;
+			width:30px;
+		}
+		.hisR{
+			text-align: right;
+			width:30px;
+		}
+		@keyframes button{
+			0%{transform:scale(1)}
+			35%{transform:scale(0.8)}
+			70%{transform:scale(1.1)}
+			100%{transform:scale(1)}
+		}
+		@keyframes number{
+			0%{transform:translateY(0px);opacity: 1;}
+			50%{transform:translateY(-50px);opacity: 0;}
+			51%{transform: translateY(10px);opacity: 0;}
+			100%{transform:translateY(0px);opacity: 1;}
+		}
+		@keyframes phrase{
+			0%{opacity: 1;}
+			50%{opacity: 0;}
+			100%{opacity: 1;}
+		}
+		.animateButton{
+			animation: button 0.6s;
+		}
+		.changeNum{
+			animation: number 0.6s;
+		}
+		.changePhrase{
+			animation: phrase 0.6s;
+		}
+		@media screen and (max-width: 675px){
+			.wrapper{
+				position: relative;
+			}
+		}
+		@media screen and (max-width: 450px){
+			.d20{
+				min-width:200px;
+			}
+			.d12,.d10{
+				min-width: 100px;
+			}
+		}
+		@media screen and (max-width: 450px){
+			.d20{
+				min-width:200px;
+			}
+			.d12,.d10{
+				min-width: auto;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<header>
+			<div class="type">d0</div>
+			<div class="history"></div>
+		</header>
+		<main>
+			<div class="result">
+				<div class="number">0</div>
+				<div class="phrase">Let's begin!</div>
+			</div>
+			<div class="dices">
+
+			</div>
+		</main>
+	</div>
+	<div class="modal">
+	</div>
+	<script type="text/javascript">
+		
+		let dices = {
+			20:{max:"19-20",great:"16-18",good:"12-15",fine:"9-11",bad:"6-8",terrible:"3-5",min:"1-2"},
+			12:{max:"11-12",great:"9-10",good:8,	fine:"6-7",	bad:"4-5",	terrible:3,		min:"1-2"},
+			10:{max:10,		great:"8-9",good:7,		fine:6,		bad:"4-5",	terrible:3,		min:"1-2"},
+			8: {max:8,		great:7,	good:6,		fine:"4-5",	bad:3,		terrible:2, 	min:1},
+			6: {max:6,		great:5,	good:4,		fine:false,	bad:3,		terrible:2,		min:1},
+			4: {max:false,	great:4,	good:3,		fine:false,	bad:2,		terrible:false,	min:1}
+		//,1: {max:1,	great:false,	good:false,		fine:false,	bad:false,		terrible:false,	min:false}
+		};
+		let phrases = {
+			max:['FUCK YEAH','Phenomenal','Amazing','Crazy'],
+			great:['Great!','Superior'],
+			good:['Good!','Nice'],
+			fine:['Fine :)','Not bad'],
+			bad:['So-so','ordinary'],
+			terrible:['Bad','Poor','Oh crap'],
+			min:['Oh shit..','Unlucky']
+		}
+
+		/*----------------*/
+		let history=[];
+		let Hdices=[]
+		let block=false;
+		let lastValue=0;
+		let value=0;
+		let table = document.querySelector('.dices');
+		let dicesKeys = Object.keys(dices);
+		for(let i=0;i<dicesKeys.length;i++){
+			let dice = document.createElement('div');
+			dice.className=`dice dice-${i} d${dicesKeys[i]}`
+			dice.textContent="d"+dicesKeys[i];
+			dice.dataset.dn=dicesKeys[i];
+			dice.addEventListener('click',generate)
+			table.appendChild(dice);
+		}
+
+		/*----------------*/
+
+		document.querySelector('.modal').onclick=function(){document.querySelector('.modal').style.display="none"}
+		document.querySelector('.history').onclick=function(){document.querySelector('.modal').style.display="flex"}
+
+		document.querySelector(".result").style.marginTop=(window.innerHeight-document.querySelector('.dices').offsetHeight-document.querySelector('.result').offsetHeight-70)/2+"px";
+		document.querySelector(".result").style.marginBottom=(window.innerHeight-document.querySelector('.dices').offsetHeight-document.querySelector('.result').offsetHeight-70)/2+"px";
+
+		function generate(event){
+			let dN = event.target.dataset.dn;
+			let values = getRandomValue(dN);
+			values.phrase= getPhrase(values.now,values.type);
+			changeValues(values);
+		}
+
+		function getRandomValue(dN){
+			lastValue=value;
+			value=0.5+1+Math.round(Math.random()*(dN-1))-0.5;
+			return {last:lastValue,now:value,type:dN}
+				
+		}
+		let lastH,predLastH;
+		function addInHistory(dN,value){
+			history.push(dN);
+			history.push(value);
+			if (history.length>20){
+				history.splice(0,1);
+				document.querySelector('.modal').removeChild(Hdices[0]);
+				Hdices.splice(0,1);
+				let hh=document.querySelectorAll('.historyDice');
+			if(!lastH){
+			lastH=hh[0];
+			predLastH=hh[1];	
+			lastH.style.opacity=0.3;
+			predLastH.style.opacity=0.6;
+			}
+			lastH.style.opacity=1;
+			lastH=hh[0];
+			predLastH=hh[1];	
+			lastH.style.opacity=0.3;
+			predLastH.style.opacity=0.6;
+		}
+			let dice =document.createElement('div');
+			dice.className = "historyDice Hd"+dN;
+
+			dice.innerHTML = "<div class='hisL'>d"+dN+"</div> <div class='hisC'>-</div> <div class='hisR'>"+value+"</div>";
+			Hdices.push(dice);
+			document.querySelector('.modal').appendChild(dice);
+		}
+
+		function getPhrase(val,dice){
+			for( type in dices[dice]) 
+				if(dices[dice][type]!=false){
+					if(typeof dices[dice][type] == 'number' && val==dices[dice][type])
+					return generatePhrase(type,dice);
+					else if(typeof dices[dice][type] == 'string'){
+						let nums=dices[dice][type].split('-');
+						if(+nums[0]<=val && +nums[1]>=val)
+							return generatePhrase(type,+dice);
+					}
+				}
+		}
+		function generatePhrase(type,dice){
+			let i = Math.round(Math.random()*(phrases[type].length-1));
+			return phrases[type][i];
+		}
+
+		function changeValues(values){
+			if(block==true)return;
+			block=true;
+			addInHistory(values.type,values.now);
+			setMainValue(values.now);
+			setTypeValue(values.type);
+			setPhrase(values.phrase);
+			animateButton(values.type);
+			animateNum();
+			animatePhrase();
+			setTimeout(function(){block=false},600);
+		}
+
+		function animateButton(type){
+			let dice = document.querySelector('.d'+type);
+			let oldClass=dice.className;
+			dice.className+=" animateButton";
+			setTimeout(function(){dice.className=oldClass},600)
+		}
+		function animateNum(){
+			let num = document.querySelector('.number');
+			let oldClass=num.className;
+			num.className+=" changeNum";
+			setTimeout(function(){num.className=oldClass},600)
+		}
+		function animatePhrase(){
+			let phrase = document.querySelector('.phrase');
+			let oldClass=phrase.className;
+			phrase.className+=" changePhrase";
+			setTimeout(function(){phrase.className=oldClass},600)
+		}
+		function setMainValue(val){
+			setTimeout(function(){
+				document.querySelector('.number').textContent = ""+val;
+			},300)
+			
+		}
+
+		function setTypeValue(val){
+			document.querySelector('.type').textContent = "d"+val;
+		}
+
+		function setPhrase(phrase){
+			setTimeout(function(){
+				document.querySelector('.phrase').textContent=phrase;
+			},300);
+			
+		}
+		window.onload = function(){
+
+		}
+
+	</script>
+</body>
+</html>
